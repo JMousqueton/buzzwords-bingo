@@ -437,10 +437,10 @@ if (finishBtn) {
   const newWord = input.value.trim();
   const chosenColor = colorPicker.value && colorPicker.value !== "#000000" ? colorPicker.value : getRandomColor();
 
-  if (!/^[\w\s\-\.]{1,20}$/.test(newWord)) {
-    alert("Invalid buzzword. Use 1–20 alphanumeric characters.");
+  if (!/^[\p{L}\p{N}\s\-\.]{1,20}$/u.test(newWord)) {
+    alert("Invalid buzzword. Use 1–20 characters (letters, numbers, space, dash, dot).");
     return;
-  }
+}
 
   if (newWord && !buzzwords[newWord]) {
     buzzwords[newWord] = { count: 0, color: chosenColor };
