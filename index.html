@@ -31,8 +31,8 @@
       font-weight: bold;
       text-transform: capitalize;
       border-radius: 50%;
-      height: 125px;
-      width: 125px;
+      height: 150px;
+      width: 150px;
       padding: 30px;
       color: #000;
       text-align: center;
@@ -181,7 +181,7 @@ body.dark .help-box {
   </div>
 
   <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
   </div>
 
   <footer class="text-center mt-5 mb-3 text-muted">
@@ -434,22 +434,24 @@ function toggleDarkMode(forceState = null) {
     }
 
     function loadSharedConfig() {
-      const params = new URLSearchParams(window.location.search);
-      const encoded = params.get("config");
-      if (encoded) {
-        try {
-          const config = JSON.parse(atob(encoded));
-          if (config.buzzwords) buzzwords = config.buzzwords;
-          if (config.winThreshold) {
-            winThreshold = config.winThreshold;
-            localStorage.setItem(thresholdKey, winThreshold);
-          }
-          saveBuzzwords();
-        } catch (err) {
-          console.error("Failed to load shared config", err);
-        }
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get("config");
+  if (encoded) {
+    try {
+      const config = JSON.parse(atob(encoded));
+      if (config.buzzwords) buzzwords = config.buzzwords;
+      if (config.winThreshold) {
+        winThreshold = config.winThreshold;
+        localStorage.setItem(thresholdKey, winThreshold);
       }
+      saveBuzzwords();
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (err) {
+      console.error("Failed to load shared config", err);
     }
+  }
+}
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
