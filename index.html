@@ -146,11 +146,13 @@ footer a:hover {
         <label for="buzzword-input" class="form-label">Add Buzzword</label>
         <div class="input-group">
           <input type="text" class="form-control" id="buzzword-input" placeholder="e.g. AI, Zero Trust" />
+          <input type="color" id="buzzword-color" title="Pick a color" style="width: 36px; height: 36px; border: none; background: none; padding: 0; cursor: pointer;" />
+
           <button class="btn btn-outline-success" type="button" onclick="addBuzzword()">
             <i class="fas fa-plus"></i>
           </button>
         </div>
-      </div>
+      </div>      
       <div class="mb-3">
         <label for="win-threshold" class="form-label">Winning Threshold</label>
         <input type="number" class="form-control" id="win-threshold" min="1" />
@@ -190,10 +192,19 @@ footer a:hover {
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
   </div>
 
-  <div class="text-center my-4">
-    <button class="btn btn-lg btn-primary" onclick="showPodium()">
-      <i class="fas fa-flag-checkered me-2"></i> This meeting is finished
+  <div class="text-center my-4 d-none" id="finishMeetingContainer">
+    <button class="btn btn-primary btn-lg" onclick="showPodium()">
+      <i class="fas fa-flag-checkered me-2"></i>The meeting is finished
     </button>
+  </div>
+
+
+  <div class="container d-none position-relative" id="podiumSection">
+    <button class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2" onclick="hidePodium()" title="Close">
+      <i class="fas fa-times"></i>
+    </button>
+    <h4 class="text-center my-3">🏆 Top 3 Buzzwords</h4>
+    <canvas id="podiumChart" height="150"></canvas>
   </div>
 
 
@@ -206,7 +217,7 @@ footer a:hover {
         <i class="fab fa-linkedin fa-lg"></i>
       </a>
     </div>
-    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0</small>
+    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0.1</small>
   </footer>
   
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -295,6 +306,17 @@ footer a:hover {
         container.appendChild(col);
       });
       document.getElementById("win-threshold").value = winThreshold;
+      document.getElementById("buzzword-color").value = getRandomColor(); // set random color on each render
+
+
+      // Check if at least one buzzword has a count > 0
+const hasClicks = Object.values(buzzwords).some(b => b.count > 0);
+const finishBtn = document.getElementById("finishMeetingContainer");
+if (finishBtn) {
+  finishBtn.classList.toggle("d-none", !hasClicks);
+}
+
+
     }
 
     function renderBuzzwordList() {
@@ -393,6 +415,8 @@ footer a:hover {
         winThreshold = 10;
         renderBuzzwords();
         renderBuzzwordList();
+        document.getElementById("finishMeetingContainer").classList.add("d-none");
+        hidePodium();
       }
     }
 
@@ -403,21 +427,28 @@ footer a:hover {
       saveBuzzwords();
       renderBuzzwords();
       renderBuzzwordList();
+      document.getElementById("finishMeetingContainer").classList.add("d-none");
+      hidePodium(); 
     }
 
     function addBuzzword() {
   const input = document.getElementById("buzzword-input");
+  const colorPicker = document.getElementById("buzzword-color");
   const newWord = input.value.trim();
+  const chosenColor = colorPicker.value || getRandomColor();
+
   if (!/^[\w\s\-\.]{1,20}$/.test(newWord)) {
     alert("Invalid buzzword. Use 1–20 alphanumeric characters.");
     return;
   }
+
   if (newWord && !buzzwords[newWord]) {
-    buzzwords[newWord] = { count: 0, color: getRandomColor() };
+    buzzwords[newWord] = { count: 0, color: chosenColor };
     saveBuzzwords();
     renderBuzzwords();
     renderBuzzwordList();
     input.value = "";
+    colorPicker.value = ""; // Reset color input
     input.focus();
   }
 }
@@ -429,7 +460,7 @@ document.getElementById("buzzword-input").addEventListener("keyup", function (e)
 
     function applySettings() {
   const newThreshold = parseInt(document.getElementById("win-threshold").value);
-  if (newThreshold && newThreshold > 0) {
+  if (!isNaN(newThreshold) && newThreshold > 0) {
     winThreshold = newThreshold;
     localStorage.setItem(thresholdKey, winThreshold);
     showToast("Settings saved!");
@@ -512,54 +543,64 @@ function toggleHelpOverlay() {
 }
 
 function showPodium() {
+  const section = document.getElementById("podiumSection");
+  section.classList.remove("d-none");
+
   const sorted = Object.entries(buzzwords)
     .sort((a, b) => b[1].count - a[1].count)
     .slice(0, 3);
 
   if (sorted.length === 0) {
-    alert("No buzzwords to show yet.");
+    section.innerHTML = `<div class="alert alert-warning text-center">No buzzwords to show!</div>`;
     return;
   }
+  launchConfetti();
+  const labels = sorted.map(([word]) => word);
+  const counts = sorted.map(([, data]) => data.count);
+  const colors = sorted.map(([, data]) => data.color);
 
-  const ctx = document.getElementById('podiumChart').getContext('2d');
-  if (window.podiumChart) {
-    window.podiumChart.destroy();
-  }
-
-  window.podiumChart = new Chart(ctx, {
-    type: 'bar',
+  const ctx = document.getElementById("podiumChart").getContext("2d");
+  if (window.podiumChartInstance) window.podiumChartInstance.destroy(); // cleanup
+  window.podiumChartInstance = new Chart(ctx, {
+    type: "bar",
     data: {
-      labels: sorted.map(([word]) => word),
+      labels,
       datasets: [{
-        label: 'Count',
-        data: sorted.map(([, data]) => data.count),
-        backgroundColor: sorted.map(([, data]) => data.color),
-        borderRadius: 10
+        label: "Buzzword Count",
+        data: counts,
+        backgroundColor: colors
       }]
     },
     options: {
-      indexAxis: 'y',
-      scales: {
-        x: { beginAtZero: true, precision: 0 }
-      },
+      responsive: true,
+      animation: { duration: 1000 },
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: function(context) {
-              return `Used ${context.raw} times`;
-            }
+            label: ctx => `Used ${ctx.parsed.y} times`
           }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          precision: 0,
+          title: { display: true, text: "Mentions" }
         }
       }
     }
   });
-
-  new bootstrap.Modal(document.getElementById("podiumModal")).show();
 }
 
-
-
+function hidePodium() {
+  const section = document.getElementById("podiumSection");
+  section.classList.add("d-none");
+  if (window.podiumChartInstance) {
+    window.podiumChartInstance.destroy();
+    window.podiumChartInstance = null;
+  }
+}
 
   </script>
 <div id="helpOverlay" class="help-overlay d-none">
@@ -570,15 +611,6 @@ function showPodium() {
       Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
     </p>
     <button id="helpCloseBtn" class="btn mt-3" onclick="toggleHelpOverlay()">Close</button>
-  </div>
-</div>
-<div class="modal fade" id="podiumModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4 text-center">
-      <h5>Top 3 Buzzwords</h5>
-      <canvas id="podiumChart" height="200"></canvas>
-      <button class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
-    </div>
   </div>
 </div>
 </body>
