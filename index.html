@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#0d6efd">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       transition: background-color 0.3s, color 0.3s;
@@ -190,6 +190,13 @@ footer a:hover {
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
   </div>
 
+  <div class="text-center my-4">
+    <button class="btn btn-lg btn-primary" onclick="showPodium()">
+      <i class="fas fa-flag-checkered me-2"></i> This meeting is finished
+    </button>
+  </div>
+
+
   <footer class="text-center mt-5 mb-3">
     <div class="d-flex justify-content-center gap-3 mb-2">
       <a href="https://github.com/JMousqueton" target="_blank" class="text-decoration-none" aria-label="GitHub Profile">
@@ -199,7 +206,7 @@ footer a:hover {
         <i class="fab fa-linkedin fa-lg"></i>
       </a>
     </div>
-    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 1.9</small>
+    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0</small>
   </footer>
   
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -504,6 +511,55 @@ function toggleHelpOverlay() {
   closeBtn.className = `btn mt-3 btn-outline-${isDark ? 'light' : 'dark'}`;
 }
 
+function showPodium() {
+  const sorted = Object.entries(buzzwords)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 3);
+
+  if (sorted.length === 0) {
+    alert("No buzzwords to show yet.");
+    return;
+  }
+
+  const ctx = document.getElementById('podiumChart').getContext('2d');
+  if (window.podiumChart) {
+    window.podiumChart.destroy();
+  }
+
+  window.podiumChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(([word]) => word),
+      datasets: [{
+        label: 'Count',
+        data: sorted.map(([, data]) => data.count),
+        backgroundColor: sorted.map(([, data]) => data.color),
+        borderRadius: 10
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: { beginAtZero: true, precision: 0 }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `Used ${context.raw} times`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  new bootstrap.Modal(document.getElementById("podiumModal")).show();
+}
+
+
+
 
   </script>
 <div id="helpOverlay" class="help-overlay d-none">
@@ -514,6 +570,15 @@ function toggleHelpOverlay() {
       Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
     </p>
     <button id="helpCloseBtn" class="btn mt-3" onclick="toggleHelpOverlay()">Close</button>
+  </div>
+</div>
+<div class="modal fade" id="podiumModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4 text-center">
+      <h5>Top 3 Buzzwords</h5>
+      <canvas id="podiumChart" height="200"></canvas>
+      <button class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+    </div>
   </div>
 </div>
 </body>
