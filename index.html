@@ -86,6 +86,33 @@
     font-size: 0.85rem;
   }
 }
+.help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+.help-box {
+  background: #fff;
+  color: #000;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+body.dark .help-box {
+  background: #2c2f33;
+  color: #fff;
+}
+
 
   </style>
 </head>
@@ -95,7 +122,7 @@
       <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#settingsMenu">
         <i class="fas fa-bars"></i>
       </button>
-      <span class="navbar-brand mb-0 h1">Buzzword Counter</span>
+      <span class="navbar-brand mb-0 h1">Buzzword Counter</span><button class="btn btn-sm btn-outline-secondary ms-2" onclick="toggleHelpOverlay()" title="About this app">?</button>
     </div>
   </nav>
 
@@ -159,7 +186,7 @@
 
   <footer class="text-center mt-5 mb-3 text-muted">
     &copy; 2025 <a href="https://github.com/JMousqueton/buzzwords-bingo" target="_blank">Julien Mousqueton</a></BR>
-    version 1.5
+    version 1.6
   </footer>
 
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -448,6 +475,21 @@
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 4000);
 }
+function toggleHelpOverlay() {
+  const overlay = document.getElementById("helpOverlay");
+  overlay.classList.toggle("d-none");
+}
+
   </script>
+<div id="helpOverlay" class="help-overlay d-none">
+  <div class="help-box">
+    <h5>About Buzzword Counter</h5>
+    <p>
+      Buzzword Counter helps you track and count overused business jargon in real-time.
+      Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
+    </p>
+    <button class="btn btn-outline-light mt-3" onclick="toggleHelpOverlay()">Close</button>
+  </div>
+</div>
 </body>
 </html>
