@@ -217,7 +217,7 @@ footer a:hover {
         <i class="fab fa-linkedin fa-lg"></i>
       </a>
     </div>
-    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0.2</small>
+    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0.3</small>
   </footer>
   
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -435,7 +435,7 @@ if (finishBtn) {
   const input = document.getElementById("buzzword-input");
   const colorPicker = document.getElementById("buzzword-color");
   const newWord = input.value.trim();
-  const chosenColor = colorPicker.value || getRandomColor();
+  const chosenColor = colorPicker.value && colorPicker.value !== "#000000" ? colorPicker.value : getRandomColor();
 
   if (!/^[\w\s\-\.]{1,20}$/.test(newWord)) {
     alert("Invalid buzzword. Use 1–20 alphanumeric characters.");
@@ -448,7 +448,7 @@ if (finishBtn) {
     renderBuzzwords();
     renderBuzzwordList();
     input.value = "";
-    colorPicker.value = ""; // Reset color input
+    // colorPicker.value = ""; // Reset color input
     input.focus();
   }
 }
