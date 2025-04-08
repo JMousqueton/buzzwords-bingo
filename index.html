@@ -186,7 +186,7 @@ body.dark .help-box {
 
   <footer class="text-center mt-5 mb-3 text-muted">
     &copy; 2025 <a href="https://github.com/JMousqueton/buzzwords-bingo" target="_blank">Julien Mousqueton</a></BR>
-    version 1.7
+    version 1.8
   </footer>
 
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -436,7 +436,8 @@ function toggleDarkMode(forceState = null) {
     function loadSharedConfig() {
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get("config");
-  if (encoded) {
+  const alreadyHasData = localStorage.getItem(buzzwordKey);
+  if (encoded && !alreadyHasData) {
     try {
       const config = JSON.parse(atob(encoded));
       if (config.buzzwords) buzzwords = config.buzzwords;
@@ -445,7 +446,6 @@ function toggleDarkMode(forceState = null) {
         localStorage.setItem(thresholdKey, winThreshold);
       }
       saveBuzzwords();
-      // Clean URL
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (err) {
       console.error("Failed to load shared config", err);
