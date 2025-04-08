@@ -414,6 +414,11 @@ footer a:hover {
     input.focus();
   }
 }
+// Enable 'Enter' key to add buzzword from the input field
+document.getElementById("buzzword-input").addEventListener("keyup", function (e) {
+  if (e.key === "Enter") addBuzzword();
+});
+
 
     function applySettings() {
   const newThreshold = parseInt(document.getElementById("win-threshold").value);
