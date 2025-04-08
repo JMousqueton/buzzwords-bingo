@@ -1,4 +1,4 @@
-# 🎯 Buzzword Counter
+# 🎯 Buzzwords Counter
 
 A fun, mobile-friendly Progressive Web App (PWA) for tracking buzzwords during meetings, conferences, or keynotes. Whether it's "AI", "Zero Trust", or "Digital Transformation"—track how often they come up and celebrate the buzz!
 
@@ -54,4 +54,4 @@ Cybersecurity evangelist & conference enthusiast 😄
 
 ---
 
-**Enjoy your next meeting with some buzzword bingo!**
+**Enjoy your next meeting with some buzzwords bingo!**
