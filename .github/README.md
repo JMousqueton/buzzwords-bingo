@@ -38,8 +38,8 @@ A fun, mobile-friendly Progressive Web App (PWA) for tracking buzzwords during m
 Just clone or unzip the repo and open `index.html` in your browser.
 
 ```bash
-git clone https://github.com/yourusername/buzzword-counter.git
-cd buzzword-counter
+git clone https://github.com/JMousqueton/buzzwords-bingo.git
+cd buzzwords-bingo
 open index.html
 ```
 
@@ -55,3 +55,13 @@ Cybersecurity evangelist & conference enthusiast 😄
 ---
 
 **Enjoy your next meeting with some buzzwords bingo!**
+
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to check the [issues page](https://github.com/JMousqueton/buzzwords-bingo/issues).
+
+## 📄 License
+
+This project is licensed under the terms of the [GNU General Public License v3.0](/LICENSE).
