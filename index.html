@@ -27,7 +27,7 @@
       color: #f8f9fa;
     }
     .buzzword-btn {
-      font-size: 1.2rem;
+      font-size: 0.85rem;
       font-weight: bold;
       text-transform: capitalize;
       border-radius: 50%;
@@ -35,6 +35,8 @@
       width: 150px;
       padding: 30px;
       color: #000;
+      text-align: center;
+      word-break: break-word;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -75,7 +77,6 @@
   </style>
 </head>
 <body class="light">
-  <!-- Navbar -->
   <nav class="navbar navbar-light bg-light shadow-sm mb-3">
     <div class="container-fluid">
       <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#settingsMenu">
@@ -85,7 +86,6 @@
     </div>
   </nav>
 
-  <!-- Settings Menu -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="settingsMenu">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title"><i class="fas fa-cog me-2"></i>Settings</h5>
@@ -146,10 +146,9 @@
 
   <footer class="text-center mt-5 mb-3 text-muted">
     &copy; 2025 Julien Mousqueton</BR>
-    version 1.2
+    v1.3
   </footer>
 
-  <!-- QR Modal -->
   <div class="modal fade" id="qrModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4 text-center">
@@ -160,7 +159,6 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
   <script>
@@ -196,20 +194,16 @@
       const container = document.getElementById("buzzword-container");
       container.innerHTML = "";
 
-      const hasBuzzwords = Object.entries(buzzwords).length > 0;
-
-      if (!hasBuzzwords) {
-        const infoBox = document.createElement("div");
-        infoBox.className = "col-12";
-        infoBox.innerHTML = `
-          <div class="card text-center shadow-sm p-4">
-            <div class="card-body">
-              <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i>No buzzwords yet!</h5>
-              <p class="card-text">Open the menu <i class="fas fa-bars"></i> and add your favorite keywords to begin counting.</p>
+      if (Object.keys(buzzwords).length === 0) {
+        container.innerHTML = `
+          <div class="col-12">
+            <div class="card text-center shadow-sm p-4">
+              <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i>No buzzwords yet!</h5>
+                <p class="card-text">Open the menu <i class="fas fa-bars"></i> and add your favorite keywords to begin counting.</p>
+              </div>
             </div>
-          </div>
-        `;
-        container.appendChild(infoBox);
+          </div>`;
         return;
       }
 
@@ -220,12 +214,9 @@
         const btn = document.createElement("button");
         btn.className = "btn buzzword-btn";
         btn.style.backgroundColor = data.color;
-        btn.innerHTML = `<i class="fas fa-microphone me-2"></i>${word} (${data.count})`;
 
-        if (data.count > 0 && data.count % winThreshold === 0) {
-          btn.classList.add("win");
-          setTimeout(() => btn.classList.remove("win"), 1000);
-        }
+        let displayWord = word.length > 10 ? word.slice(0, 8) + "…" : word;
+        btn.innerHTML = `<i class="fas fa-microphone me-1"></i><br>${displayWord} (${data.count})`;
 
         btn.onclick = () => {
           buzzwords[word].count++;
@@ -233,7 +224,11 @@
           renderBuzzwords();
           renderBuzzwordList();
           vibrateClick();
-          if (buzzwords[word].count % winThreshold === 0) launchConfetti();
+          if (buzzwords[word].count % winThreshold === 0) {
+            btn.classList.add("win");
+            setTimeout(() => btn.classList.remove("win"), 1000);
+            launchConfetti();
+          }
         };
 
         col.appendChild(btn);
@@ -299,10 +294,7 @@
     function copyShareLink() {
       const sharedBuzzwords = {};
       for (const [word, data] of Object.entries(buzzwords)) {
-        sharedBuzzwords[word] = {
-          count: 0,
-          color: data.color
-        };
+        sharedBuzzwords[word] = { count: 0, color: data.color };
       }
       const config = { buzzwords: sharedBuzzwords, winThreshold };
       const encoded = btoa(JSON.stringify(config));
@@ -310,19 +302,14 @@
       if (url.length > 2000) {
         alert("Link too long to share. Please use the Export Config option instead.");
       } else {
-        navigator.clipboard.writeText(url).then(() => {
-          alert("Share link copied!");
-        });
+        navigator.clipboard.writeText(url).then(() => alert("Share link copied!"));
       }
     }
 
     function showQRCode() {
       const sharedBuzzwords = {};
       for (const [word, data] of Object.entries(buzzwords)) {
-        sharedBuzzwords[word] = {
-          count: 0,
-          color: data.color
-        };
+        sharedBuzzwords[word] = { count: 0, color: data.color };
       }
       const config = { buzzwords: sharedBuzzwords, winThreshold };
       const encoded = btoa(JSON.stringify(config));
@@ -396,6 +383,7 @@
     function loadTheme() {
       const saved = localStorage.getItem(themeKey);
       const isDark = saved === "dark";
+      document.getElementById("darkModeSwitch").checked = isDark;
       toggleDarkMode(isDark);
     }
 
