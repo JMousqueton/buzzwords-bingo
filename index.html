@@ -74,6 +74,19 @@
     body.dark footer {
       color: #fff !important;
     }
+    .buzzword-btn {
+  font-size: 0.75rem;
+  height: 120px;
+  width: 120px;
+}
+@media (min-width: 768px) {
+  .buzzword-btn {
+    height: 150px;
+    width: 150px;
+    font-size: 0.85rem;
+  }
+}
+
   </style>
 </head>
 <body class="light">
@@ -145,8 +158,8 @@
   </div>
 
   <footer class="text-center mt-5 mb-3 text-muted">
-    &copy; 2025 Julien Mousqueton</BR>
-    v1.3
+    &copy; 2025 <a href="https://github.com/JMousqueton/buzzwords-bingo" target="_blank">Julien Mousqueton</a></BR>
+    version 1.5
   </footer>
 
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -234,6 +247,7 @@
         col.appendChild(btn);
         container.appendChild(col);
       });
+      document.getElementById("win-threshold").value = winThreshold;
     }
 
     function renderBuzzwordList() {
@@ -270,26 +284,27 @@
     }
 
     function importConfig(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        try {
-          const config = JSON.parse(e.target.result);
-          if (config.buzzwords) buzzwords = config.buzzwords;
-          if (config.winThreshold) {
-            winThreshold = config.winThreshold;
-            localStorage.setItem(thresholdKey, winThreshold);
-          }
-          saveBuzzwords();
-          renderBuzzwords();
-          renderBuzzwordList();
-        } catch {
-          alert("Invalid config file.");
-        }
-      };
-      reader.readAsText(file);
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const config = JSON.parse(e.target.result);
+      if (config.buzzwords) buzzwords = config.buzzwords;
+      if (config.winThreshold) {
+        winThreshold = config.winThreshold;
+        localStorage.setItem(thresholdKey, winThreshold);
+      }
+      saveBuzzwords();
+      renderBuzzwords();
+      renderBuzzwordList();
+      document.getElementById("win-threshold").value = winThreshold;
+    } catch (err) {
+      alert("Invalid config file: " + err.message);
     }
+  };
+  reader.readAsText(file);
+}
 
     function copyShareLink() {
       const sharedBuzzwords = {};
@@ -344,25 +359,30 @@
     }
 
     function addBuzzword() {
-      const input = document.getElementById("buzzword-input");
-      const newWord = input.value.trim();
-      if (newWord && !buzzwords[newWord]) {
-        buzzwords[newWord] = { count: 0, color: getRandomColor() };
-        saveBuzzwords();
-        renderBuzzwords();
-        renderBuzzwordList();
-        input.value = "";
-        input.focus();
-      }
-    }
+  const input = document.getElementById("buzzword-input");
+  const newWord = input.value.trim();
+  if (!/^[\w\s\-\.]{1,20}$/.test(newWord)) {
+    alert("Invalid buzzword. Use 1–20 alphanumeric characters.");
+    return;
+  }
+  if (newWord && !buzzwords[newWord]) {
+    buzzwords[newWord] = { count: 0, color: getRandomColor() };
+    saveBuzzwords();
+    renderBuzzwords();
+    renderBuzzwordList();
+    input.value = "";
+    input.focus();
+  }
+}
 
     function applySettings() {
-      const newThreshold = parseInt(document.getElementById("win-threshold").value);
-      if (newThreshold && newThreshold > 0) {
-        winThreshold = newThreshold;
-        localStorage.setItem(thresholdKey, winThreshold);
-      }
-    }
+  const newThreshold = parseInt(document.getElementById("win-threshold").value);
+  if (newThreshold && newThreshold > 0) {
+    winThreshold = newThreshold;
+    localStorage.setItem(thresholdKey, winThreshold);
+    showToast("Settings saved!");
+  }
+}
 
     function toggleDarkMode(forceState = null) {
       const body = document.body;
@@ -415,6 +435,19 @@
     loadTheme();
     renderBuzzwords();
     renderBuzzwordList();
+
+
+    function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.className = "toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3 show";
+  toast.setAttribute("role", "alert");
+  toast.innerHTML = `<div class="d-flex">
+    <div class="toast-body">${msg}</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+  </div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
   </script>
 </body>
 </html>
