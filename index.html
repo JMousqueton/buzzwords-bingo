@@ -27,13 +27,13 @@
       color: #f8f9fa;
     }
     .buzzword-btn {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
       text-transform: capitalize;
       border-radius: 50%;
-      height: 100px;
-      width: 100px;
-      padding: 20px;
+      height: 150px;
+      width: 150px;
+      padding: 30px;
       color: #000;
       display: flex;
       align-items: center;
@@ -68,6 +68,9 @@
       .offcanvas-end.show {
         transform: translateX(0);
       }
+    }
+    body.dark footer {
+      color: #fff !important;
     }
   </style>
 </head>
@@ -110,10 +113,15 @@
         <i class="fas fa-check-circle me-1"></i>Apply Settings
       </button>
       <hr/>
-      <div class="d-flex justify-content-between align-items-center">
-        <h6 class="mb-0">Buzzwords</h6>
-        <button class="btn btn-outline-danger btn-sm" onclick="resetAll()">
-          <i class="fas fa-trash-alt me-1"></i>Reset All
+      <div class="d-flex flex-column gap-2">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">Buzzwords</h6>
+          <button class="btn btn-outline-danger btn-sm" onclick="resetAll()">
+            <i class="fas fa-trash-alt me-1"></i>Reset All
+          </button>
+        </div>
+        <button class="btn btn-outline-warning btn-sm" onclick="resetCounters()">
+          <i class="fas fa-undo me-1"></i>Reset All Counters
         </button>
       </div>
       <div class="d-grid gap-2 mt-3">
@@ -133,12 +141,12 @@
   </div>
 
   <div class="container">
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
   </div>
 
   <footer class="text-center mt-5 mb-3 text-muted">
-    &copy; 2025 Julien Mousqueton<BR>
-      Version 1.1
+    &copy; 2025 Julien Mousqueton</BR>
+    version 1.2
   </footer>
 
   <!-- QR Modal -->
@@ -187,6 +195,24 @@
     function renderBuzzwords() {
       const container = document.getElementById("buzzword-container");
       container.innerHTML = "";
+
+      const hasBuzzwords = Object.entries(buzzwords).length > 0;
+
+      if (!hasBuzzwords) {
+        const infoBox = document.createElement("div");
+        infoBox.className = "col-12";
+        infoBox.innerHTML = `
+          <div class="card text-center shadow-sm p-4">
+            <div class="card-body">
+              <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i>No buzzwords yet!</h5>
+              <p class="card-text">Open the menu <i class="fas fa-bars"></i> and add your favorite keywords to begin counting.</p>
+            </div>
+          </div>
+        `;
+        container.appendChild(infoBox);
+        return;
+      }
+
       Object.entries(buzzwords).forEach(([word, data]) => {
         const col = document.createElement("div");
         col.className = "col";
@@ -194,7 +220,7 @@
         const btn = document.createElement("button");
         btn.className = "btn buzzword-btn";
         btn.style.backgroundColor = data.color;
-        btn.innerHTML = `<i class="fas fa-microphone"></i> ${word} (${data.count})`;
+        btn.innerHTML = `<i class="fas fa-microphone me-2"></i>${word} (${data.count})`;
 
         if (data.count > 0 && data.count % winThreshold === 0) {
           btn.classList.add("win");
@@ -217,7 +243,6 @@
 
     function renderBuzzwordList() {
       const list = document.getElementById("buzzword-list");
-      if (!list) return;
       list.innerHTML = "";
       Object.keys(buzzwords).forEach(word => {
         const li = document.createElement("li");
@@ -272,7 +297,14 @@
     }
 
     function copyShareLink() {
-      const config = { buzzwords, winThreshold };
+      const sharedBuzzwords = {};
+      for (const [word, data] of Object.entries(buzzwords)) {
+        sharedBuzzwords[word] = {
+          count: 0,
+          color: data.color
+        };
+      }
+      const config = { buzzwords: sharedBuzzwords, winThreshold };
       const encoded = btoa(JSON.stringify(config));
       const url = `${location.origin}${location.pathname}?config=${encoded}`;
       if (url.length > 2000) {
@@ -285,7 +317,14 @@
     }
 
     function showQRCode() {
-      const config = { buzzwords, winThreshold };
+      const sharedBuzzwords = {};
+      for (const [word, data] of Object.entries(buzzwords)) {
+        sharedBuzzwords[word] = {
+          count: 0,
+          color: data.color
+        };
+      }
+      const config = { buzzwords: sharedBuzzwords, winThreshold };
       const encoded = btoa(JSON.stringify(config));
       const url = `${location.origin}${location.pathname}?config=${encoded}`;
       if (url.length > 2000) {
@@ -297,24 +336,6 @@
       new bootstrap.Modal(document.getElementById("qrModal")).show();
     }
 
-    function loadSharedConfig() {
-      const params = new URLSearchParams(window.location.search);
-      const encoded = params.get("config");
-      if (encoded) {
-        try {
-          const config = JSON.parse(atob(encoded));
-          if (config.buzzwords) buzzwords = config.buzzwords;
-          if (config.winThreshold) {
-            winThreshold = config.winThreshold;
-            localStorage.setItem(thresholdKey, winThreshold);
-          }
-          saveBuzzwords();
-        } catch (err) {
-          console.error("Failed to load shared config", err);
-        }
-      }
-    }
-
     function resetAll() {
       if (confirm("This will clear all buzzwords and settings. Are you sure?")) {
         localStorage.removeItem(buzzwordKey);
@@ -324,6 +345,15 @@
         renderBuzzwords();
         renderBuzzwordList();
       }
+    }
+
+    function resetCounters() {
+      Object.keys(buzzwords).forEach(word => {
+        buzzwords[word].count = 0;
+      });
+      saveBuzzwords();
+      renderBuzzwords();
+      renderBuzzwordList();
     }
 
     function addBuzzword() {
@@ -369,9 +399,23 @@
       toggleDarkMode(isDark);
     }
 
-    document.getElementById("darkModeSwitch").addEventListener("change", e => {
-      toggleDarkMode(e.target.checked);
-    });
+    function loadSharedConfig() {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get("config");
+      if (encoded) {
+        try {
+          const config = JSON.parse(atob(encoded));
+          if (config.buzzwords) buzzwords = config.buzzwords;
+          if (config.winThreshold) {
+            winThreshold = config.winThreshold;
+            localStorage.setItem(thresholdKey, winThreshold);
+          }
+          saveBuzzwords();
+        } catch (err) {
+          console.error("Failed to load shared config", err);
+        }
+      }
+    }
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
