@@ -112,7 +112,13 @@ body.dark .help-box {
   background: #2c2f33;
   color: #fff;
 }
-
+footer a {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+footer a:hover {
+  color: #0d6efd;
+}
 
   </style>
 </head>
@@ -184,11 +190,18 @@ body.dark .help-box {
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="buzzword-container"></div>
   </div>
 
-  <footer class="text-center mt-5 mb-3 text-muted">
-    &copy; 2025 <a href="https://github.com/JMousqueton/buzzwords-bingo" target="_blank">Julien Mousqueton</a></BR>
-    version 1.8a
+  <footer class="text-center mt-5 mb-3">
+    <div class="d-flex justify-content-center gap-3 mb-2">
+      <a href="https://github.com/JMousqueton" target="_blank" class="text-decoration-none" aria-label="GitHub Profile">
+        <i class="fab fa-github fa-lg"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/julienmousqueton" target="_blank" class="text-decoration-none" aria-label="LinkedIn Profile">
+        <i class="fab fa-linkedin fa-lg"></i>
+      </a>
+    </div>
+    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 1.9</small>
   </footer>
-
+  
   <div class="modal fade" id="qrModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4 text-center">
