@@ -133,7 +133,7 @@ body.dark .help-box {
     </div>
     <div class="offcanvas-body">
       <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+        <input class="form-check-input" type="checkbox" id="darkModeSwitch" onchange="toggleDarkMode()">
         <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
       </div>
       <div class="mb-3">
@@ -186,7 +186,7 @@ body.dark .help-box {
 
   <footer class="text-center mt-5 mb-3 text-muted">
     &copy; 2025 <a href="https://github.com/JMousqueton/buzzwords-bingo" target="_blank">Julien Mousqueton</a></BR>
-    version 1.6
+    version 1.7
   </footer>
 
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -411,22 +411,21 @@ body.dark .help-box {
   }
 }
 
-    function toggleDarkMode(forceState = null) {
-      const body = document.body;
-      const isDark = forceState !== null ? forceState : !body.classList.contains("dark");
-      if (isDark) {
-        body.classList.remove("light");
-        body.classList.add("dark");
-        localStorage.setItem(themeKey, "dark");
-        document.getElementById("darkModeSwitch").checked = true;
-      } else {
-        body.classList.remove("dark");
-        body.classList.add("light");
-        localStorage.setItem(themeKey, "light");
-        document.getElementById("darkModeSwitch").checked = false;
-      }
-    }
-
+function toggleDarkMode(forceState = null) {
+  const body = document.body;
+  const isDark = forceState !== null ? forceState : !body.classList.contains("dark");
+  if (isDark) {
+    body.classList.remove("light");
+    body.classList.add("dark");
+    localStorage.setItem(themeKey, "dark");
+    document.getElementById("darkModeSwitch").checked = true;
+  } else {
+    body.classList.remove("dark");
+    body.classList.add("light");
+    localStorage.setItem(themeKey, "light");
+    document.getElementById("darkModeSwitch").checked = false;
+  }
+}
     function loadTheme() {
       const saved = localStorage.getItem(themeKey);
       const isDark = saved === "dark";
@@ -478,7 +477,13 @@ body.dark .help-box {
 function toggleHelpOverlay() {
   const overlay = document.getElementById("helpOverlay");
   overlay.classList.toggle("d-none");
+
+  const closeBtn = document.getElementById("helpCloseBtn");
+  const isDark = document.body.classList.contains("dark");
+
+  closeBtn.className = `btn mt-3 btn-outline-${isDark ? 'light' : 'dark'}`;
 }
+
 
   </script>
 <div id="helpOverlay" class="help-overlay d-none">
@@ -488,7 +493,7 @@ function toggleHelpOverlay() {
       Buzzword Counter helps you track and count overused business jargon in real-time.
       Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
     </p>
-    <button class="btn btn-outline-light mt-3" onclick="toggleHelpOverlay()">Close</button>
+    <button id="helpCloseBtn" class="btn mt-3" onclick="toggleHelpOverlay()">Close</button>
   </div>
 </div>
 </body>
