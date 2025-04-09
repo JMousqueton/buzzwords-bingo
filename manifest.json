@@ -1,5 +1,5 @@
 {
-  "name": "Buzzword Counter",
+  "name": "Buzzwords Counter",
   "short_name": "Buzzwords",
   "start_url": "./",
   "display": "standalone",
