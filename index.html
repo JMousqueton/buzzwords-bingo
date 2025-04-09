@@ -494,7 +494,8 @@ function toggleDarkMode(forceState = null) {
     function loadSharedConfig() {
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get("config");
-  const alreadyHasData = localStorage.getItem(buzzwordKey);
+  const stored = localStorage.getItem(buzzwordKey);
+  const alreadyHasData = stored && Object.keys(JSON.parse(stored)).length > 0;
 
   if (encoded) {
     try {
