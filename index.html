@@ -238,7 +238,7 @@ footer a:hover {
         <i class="fab fa-linkedin fa-lg"></i>
       </a>
     </div>
-    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0.3</small>
+    <small class="text-muted">&copy; 2025 Julien Mousqueton • <a href="https://github.com/JMousqueton/buzzwords-bingo" class="text-muted text-decoration-underline" target="_blank">buzzwords-bingo</a> • version 2.0.4</small>
   </footer>
   
   <div class="modal fade" id="qrModal" tabindex="-1">
@@ -513,22 +513,40 @@ function toggleDarkMode(forceState = null) {
     function loadSharedConfig() {
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get("config");
-  const alreadyHasData = localStorage.getItem(buzzwordKey);
-  if (encoded && !alreadyHasData) {
-    try {
-      const config = JSON.parse(atob(encoded));
-      if (config.buzzwords) buzzwords = config.buzzwords;
-      if (config.winThreshold) {
-        winThreshold = config.winThreshold;
-        localStorage.setItem(thresholdKey, winThreshold);
-      }
-      saveBuzzwords();
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } catch (err) {
-      console.error("Failed to load shared config", err);
+  if (!encoded) return;
+
+  try {
+    const config = JSON.parse(atob(encoded));
+    if (!config.buzzwords || !config.winThreshold) return;
+
+    const alreadyHasData = localStorage.getItem(buzzwordKey);
+
+    if (alreadyHasData) {
+      // Defer the config load and show modal
+      window.pendingConfig = config;
+      const modal = new bootstrap.Modal(document.getElementById("configConfirmModal"));
+      modal.show();
+    } else {
+      applySharedConfig(config);
     }
+
+    // Always clean the URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } catch (err) {
+    console.error("Failed to load shared config", err);
   }
 }
+
+function applySharedConfig(config) {
+  buzzwords = config.buzzwords;
+  winThreshold = config.winThreshold;
+  localStorage.setItem(thresholdKey, winThreshold);
+  saveBuzzwords();
+  renderBuzzwords();
+  renderBuzzwordList();
+  document.getElementById("win-threshold").value = winThreshold;
+}
+
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
@@ -632,6 +650,18 @@ function hidePodium() {
       Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
     </p>
     <button id="helpCloseBtn" class="btn mt-3" onclick="toggleHelpOverlay()">Close</button>
+  </div>
+</div>
+<div class="modal fade" id="configConfirmModal" tabindex="-1" aria-labelledby="configConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4 text-center">
+      <h5 id="configConfirmLabel" class="mb-3">Load Shared Configuration?</h5>
+      <p>This will <strong>replace your current buzzword list</strong> and reset all counters.</p>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button class="btn btn-danger" id="confirmReplaceBtn">Yes, replace</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 </body>
