@@ -537,10 +537,10 @@ function applySharedConfig(config) {
         .catch(err => console.error("Service Worker Error", err));
     }
 
-    loadSharedConfig();
-    loadTheme();
-    renderBuzzwords();
-    renderBuzzwordList();
+   // loadSharedConfig();
+   // loadTheme();
+   // renderBuzzwords();
+   // renderBuzzwordList();
 
 
     function showToast(msg) {
@@ -623,6 +623,13 @@ function hidePodium() {
     window.podiumChartInstance = null;
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadSharedConfig();
+  loadTheme();
+  renderBuzzwords();
+  renderBuzzwordList();
+});
 
   </script>
 <div id="helpOverlay" class="help-overlay d-none">
