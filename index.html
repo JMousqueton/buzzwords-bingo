@@ -711,9 +711,15 @@ const translations = {
 
 function applyTranslations(lang) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.style.opacity = 0;
     const key = el.getAttribute("data-i18n");
-    const translation = i18nkey[lang]?.[key];
-    if (translation) el.innerHTML = translation; // 👈 use innerHTML for HTML support
+    const translation = i18n[lang]?.[key];
+    if (translation) {
+      setTimeout(() => {
+        el.textContent = translation;
+        el.style.opacity = 1;
+      }, 150);
+    }
   });
   localStorage.setItem(i18nKey, lang);
 }
