@@ -713,10 +713,10 @@ function applyTranslations(lang) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     el.style.opacity = 0;
     const key = el.getAttribute("data-i18n");
-    const translation = i18n[lang]?.[key];
+    const translation = translations[lang]?.[key];
     if (translation) {
       setTimeout(() => {
-        el.textContent = translation;
+        el.innerHTML = translation; // ← use innerHTML to support <i> tags
         el.style.opacity = 1;
       }, 150);
     }
