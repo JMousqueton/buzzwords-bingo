@@ -7,16 +7,16 @@
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAANl0lEQVR4nMU6a5BU1Znfd86593b39LZ0pXdakJGVZSEKSoESB1wMA0V0WBo9b6M42z8pDkGmnI2JNZBoEmKp1EtrfGmDUwjUCoUtA3TK3mlv/NxUdfLu/v9Pf++Pfv4vT2fR1x8/ztXxsznrl+PNyfLUXkRI5+eiNSDLr2Kncb+Rht74brsP31eQ38eW89wf3ayrI9QbcDbyZ6GoN/XdkA88Dn4j8D3MfS/k6HgntIh0YzeEXiX2vMJ/OupNYGeugmPBB8t6HvJDUrUULrcEl8DHhYXKzUStXPpjAWzuxPsHnW7k/2Eak1++gO9V3+ExGvVIdyTDjJZcM4jGduomce9mvXbMEj63T2if6Lv57+nTx2f/jgdeEV87ajzdaGHpxNppv0m5ycaxXX4X7u3qD3n9vzm0nfJ8xTw4b2G6uhUejNGpZ/2sHRv9CByHe5FuoOPw++6z6DnqwrFlmkuvMkXW3k9+x+F3oDrnP3R+hr2O1KhxqGbTwzhr9Mevc4k6VG6dcOxE+P9C6hn4L4S84U7uD/9gZ7CR69+iyOB8oXJ3fhbF+/0ZekbaN5GbcNvM08FcHe+vyU0etU2KCHrpllvqFtpSPsnskl7I5w0UlSpu9eeK90MmsbV+N3CGbnYRhG7Y7ycuQDo9PYeqcONHvzMIvX7rKHeAJRr0yyOeRuVuowKZuX8v57RfVW8z8NEiy3xyt+3KHyfV/pPqVydW2EhtORcYqdrcoPP+NzN/0v0nzf6edKyXDJYIkuNQ6pbzkHz/ISjxMf3PtXuL99bxm/9+dq/WZvfdt+CZ1vxPZge6Ro99sO+I7R7OdtwnDPpK9d/MtEyjf9Lr04mnVrf9gRzNbfvMvKZnVbhxLXOch4tmwhje1zA5M/uy+fKOX7g4rJ/uFfWhj88/9//s3+i3P4/GY9w2X+ak5EtzPZqe1aUoZ3OuHTAo05v+lwD3Fn9g3Pb36E90gUnz6GmjPvzOYdnv3cOEZxj6T0+rJHtH1UFPBOk7MRN3zR6OB6PZ7NF/5KRGcn3a48nUp8n8EdZBf6Yw82n8NzMLfyRb5j7Jphix3Tze4q/fPb75bImccyNb5V+/39zW/EVx/Xl9d10v9FgvoU3ff1SX1f0KPjtxZ+T35X+T31o7A+e7fqtYkVjq2hgfR/WFMi9X4fxe3+4bQdrke6lQvjaQvRZxX+Hnp54KOxwzD+EnM+Nnkl1U+0aW5eeS/8/tEXKcD1Yfnb54iV77aLtvCXw7+fipFeUYRL4omv4GMVXl0WZasX5mVr+C3kqUNAKDR0r5tfwRXL+VTScFztp9Fff8tz88f5m+0/kfFeiujEr3t3uD0RcX3bv+lUXn8ni/RUXT82hQyY9KRrFWYvTZxW6qW9WvO0QvrT/2Clv2I3PZ1+EUNiXPaSgkZZt5n3jF+VqO7tvyrZDq5Rx4JydxXpRuV6vVCr1cqlWqVSr1eq1Uq9XKpVqlUq9XqtVKvV6pVqlUq9XqtVKvV6pVqlUq9XqtVKvV6pVqlX+v1Sv14m7pT/LoAAAAASUVORK5CYII=" />
 
   <!-- Open Graph (Facebook, LinkedIn, etc.) -->
-  <meta property="og:title" content="Buzzwords Bingo – L'app qui traque les buzzwords en réunion">
-  <meta property="og:description" content="Une application open source fun et utile pour suivre les buzzwords pendant vos réunions.">
+  <meta property="og:title" content="Buzzwords Bingo - The app that tracks buzzwords in meetings">
+  <meta property="og:description" content="A fun and useful open source application for tracking buzzwords during your meetings.">
   <meta property="og:image" content="https://buzzwords.julien.io/og-image.png">
   <meta property="og:url" content="https://buzzwords.julien.io">
   <meta property="og:type" content="website">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Buzzwords Bingo – L'app qui traque les buzzwords en réunion">
-  <meta name="twitter:description" content="Une application open source fun et utile pour suivre les buzzwords pendant vos réunions.">
+  <meta name="twitter:title" content="Buzzwords Bingo - The app that tracks buzzwords in meetings">
+  <meta name="twitter:description" content="A fun and useful open source application for tracking buzzwords during your meetings.">
   <meta name="twitter:image" content="https://buzzwords.julien.io/og-image.png">
   <meta name="twitter:url" content="https://buzzwords.julien.io">
 
@@ -135,7 +135,9 @@ footer a {
 footer a:hover {
   color: #0d6efd;
 }
-
+[data-i18n] {
+  transition: opacity 0.3s ease;
+}
   </style>
 
 <script>
@@ -150,7 +152,6 @@ footer a:hover {
       <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#settingsMenu">
         <i class="fas fa-bars"></i>
       </button>
-      <!-- <span class="navbar-brand mb-0 h1"> <i class="fa-solid fa-dice"></i> Buzzwords Counter</span>-->
       <span class="navbar-brand mb-0 h1" data-i18n="appTitle"></span>  <button class="btn btn-sm btn-outline-secondary ms-2" onclick="toggleHelpOverlay()" title="About this app">?</button>
     </div>
   </nav>
@@ -163,7 +164,7 @@ footer a:hover {
     <div class="offcanvas-body">
       <div class="form-check form-switch mb-3">
         <input class="form-check-input" type="checkbox" id="darkModeSwitch" onchange="toggleDarkMode()">
-        <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+        <label class="form-check-label" for="darkModeSwitch" data-i18n="darkModeLabel">Dark Mode</label>
       </div>
       <div class="mb-3">
         <label for="lang-select" class="form-label">Language / Langue</label>
@@ -173,7 +174,7 @@ footer a:hover {
         </select>
       </div>
       <div class="mb-3">
-        <label for="buzzword-input" class="form-label">Add Buzzword</label>
+        <label for="buzzword-input" class="form-label" data-i18n="addBuzzword">Add Buzzwords</label>
         <div class="input-group">
           <input type="text" class="form-control" id="buzzword-input" placeholder="e.g. AI, Zero Trust" />
           <input type="color" id="buzzword-color" title="Pick a color" style="width: 36px; height: 36px; border: none; background: none; padding: 0; cursor: pointer;" />
@@ -184,34 +185,34 @@ footer a:hover {
         </div>
       </div>      
       <div class="mb-3">
-        <label for="win-threshold" class="form-label">Winning Threshold</label>
+        <label for="win-threshold" class="form-label" data-i18n="winThreshold">Winning Threshold</label>
         <input type="number" class="form-control" id="win-threshold" min="1" />
       </div>
       <button class="btn btn-success w-100" onclick="applySettings()">
-        <i class="fas fa-check-circle me-1"></i>Apply Settings
+        <i class="fas fa-check-circle me-1"></i><span data-i18n="applySettings">Apply Settings</span>
       </button>
       <hr/>
       <div class="d-flex flex-column gap-2">
         <div class="d-flex justify-content-between align-items-center">
           <h6 class="mb-0">Buzzwords</h6>
           <button class="btn btn-outline-danger btn-sm" onclick="resetAll()">
-            <i class="fas fa-trash-alt me-1"></i>Reset All
+            <i class="fas fa-trash-alt me-1"></i><span data-i18n="resetAll">Reset All</span>
           </button>
         </div>
         <button class="btn btn-outline-warning btn-sm" onclick="resetCounters()">
-          <i class="fas fa-undo me-1"></i>Reset All Counters
+          <i class="fas fa-undo me-1"></i><span data-i18n="resetCounters">Reset All Counters</span>
         </button>
       </div>
       <div class="d-grid gap-2 mt-3">
         <button class="btn btn-outline-secondary" onclick="exportConfig()">
-          <i class="fas fa-download me-1"></i> Export Config
+          <i class="fas fa-download me-1"></i><span data-i18n="exportConfig">Export Config</span>
         </button>
         <input type="file" id="configFileInput" class="form-control" onchange="importConfig(event)">
         <button class="btn btn-outline-primary" onclick="copyShareLink()">
-          <i class="fas fa-link me-1"></i> Copy Share Link
+          <i class="fas fa-link me-1"></i><span data-i18n="copyLink">Copy Share Link</span>
         </button>
         <button class="btn btn-outline-info" onclick="showQRCode()">
-          <i class="fas fa-qrcode me-1"></i> Show QR Code
+          <i class="fas fa-qrcode me-1"></i><span data-i18n="showQR">Show QR Code</span>
         </button>
       </div>
       <ul class="list-group list-group-flush mt-2" id="buzzword-list"></ul>
@@ -224,7 +225,7 @@ footer a:hover {
 
   <div class="text-center my-4 d-none" id="finishMeetingContainer">
     <button class="btn btn-primary btn-lg" onclick="showPodium()">
-      <i class="fas fa-flag-checkered me-2"></i>The meeting is finished
+      <i class="fas fa-flag-checkered me-2"></i><span data-i18n="finishBtn">The meeting is finished</span>
     </button>
   </div>
 
@@ -300,8 +301,8 @@ footer a:hover {
           <div class="col-12">
             <div class="card text-center shadow-sm p-4">
               <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i>No buzzwords yet!</h5>
-                <p class="card-text">Open the menu <i class="fas fa-bars"></i> and add your favorite keywords to begin counting.</p>
+                <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i><span data-i18n="noBuzzwords"></span></h5>
+                <p class="card-text" data-i18n="noBuzzwordsHelp">Open the menu <i class="fas fa-bars"></i> and add your favorite keywords to begin counting.</p>
               </div>
             </div>
           </div>`;
@@ -662,12 +663,13 @@ const translations = {
   en: {
     appTitle: " <i class="fa-solid fa-dice"></i> Buzzwords Counter",
     noBuzzwords: "No buzzwords yet!",
-    addBuzzword: "Add Buzzword",
+    addBuzzword: "Add Buzzwords",
     winThreshold: "Winning Threshold",
     applySettings: "Apply Settings",
     resetAll: "Reset All",
     resetCounters: "Reset All Counters",
     exportConfig: "Export Config",
+    darkModeLabel: "Dark Mode",
     copyLink: "Copy Share Link",
     showQR: "Show QR Code",
     finishBtn: "The meeting is finished",
@@ -678,17 +680,20 @@ const translations = {
     loadConfigConfirm: "Load Shared Configuration?",
     loadConfigText: "This will replace your current buzzwords with the shared setup.",
     cancel: "Cancel",
-    confirm: "Load Config"
+    confirm: "Load Config",
+    noBuzzwordsHelp: "Open the menu <i class='fas fa-bars'></i> and add your favorite keywords to begin counting."
+  
   },
   fr: {
     appTitle: " <i class="fa-solid fa-dice"></i> Compteur de Buzzwords",
     noBuzzwords: "Aucun buzzword pour le moment !",
-    addBuzzword: "Ajouter un buzzword",
+    addBuzzword: "Ajouter des buzzwords",
     winThreshold: "Seuil de victoire",
     applySettings: "Appliquer les paramètres",
     resetAll: "Tout réinitialiser",
     resetCounters: "Remettre les compteurs à zéro",
     exportConfig: "Exporter la config",
+    darkModeLabel: "Mode sombre",
     copyLink: "Copier le lien",
     showQR: "Afficher le QR Code",
     finishBtn: "La réunion est terminée",
@@ -699,19 +704,19 @@ const translations = {
     loadConfigConfirm: "Charger la configuration partagée ?",
     loadConfigText: "Cela remplacera vos buzzwords actuels par la configuration partagée.",
     cancel: "Annuler",
-    confirm: "Charger"
+    confirm: "Charger",
+    noBuzzwordsHelp: "Ouvrez le menu <i class='fas fa-bars'></i> et ajoutez vos mots-clés favoris pour commencer à compter."
   }
 };
 
-  function applyTranslations(lang) {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      if (translations[lang] && translations[lang][key]) {
-        el.textContent = translations[lang][key];
-      }
-    });
-    localStorage.setItem(i18nKey, lang);
-  }
+function applyTranslations(lang) {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    const translation = i18n[lang]?.[key];
+    if (translation) el.innerHTML = translation; // 👈 use innerHTML for HTML support
+  });
+  localStorage.setItem(i18nKey, lang);
+}
 
   document.addEventListener("DOMContentLoaded", function () {
     loadSharedConfig();
