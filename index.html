@@ -681,7 +681,10 @@ const translations = {
     loadConfigText: "This will replace your current buzzwords with the shared setup.",
     cancel: "Cancel",
     confirm: "Load Config",
-    noBuzzwordsHelp: "Open the menu <i class='fas fa-bars'></i> and add your favorite keywords to begin counting."
+    aboutTitle: "About Buzzwords Counter",
+    noBuzzwordsHelp: "Open the menu <i class='fas fa-bars'></i> and add your favorite keywords to begin counting.",
+    aboutText: "Buzzwords Counter helps you track and count overused business jargon in real-time. Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!"
+
   
   },
   fr: {
@@ -705,7 +708,10 @@ const translations = {
     loadConfigText: "Cela remplacera vos buzzwords actuels par la configuration partagée.",
     cancel: "Annuler",
     confirm: "Charger",
-    noBuzzwordsHelp: "Ouvrez le menu <i class='fas fa-bars'></i> et ajoutez vos mots-clés favoris pour commencer à compter."
+    aboutTitle: "À propos de Buzzwords Counter",
+    noBuzzwordsHelp: "Ouvrez le menu <i class='fas fa-bars'></i> et ajoutez vos mots-clés favoris pour commencer à compter.",
+    aboutText: "Buzzwords Counter vous aide à suivre et compter les mots à la mode abusivement utilisés en entreprise. Ajoutez vos buzzwords favoris, cliquez dessus pendant la réunion, et déclenchez des confettis dès que vous atteignez le seuil !"
+
   }
 };
 
@@ -736,8 +742,8 @@ function applyTranslations(lang) {
   </script>
 <div id="helpOverlay" class="help-overlay d-none">
   <div class="help-box">
-    <h5>About Buzzwords Counter</h5>
-    <p>
+    <h5 data-i18n="aboutTitle">About Buzzwords Counter</h5>
+    <p data-i18n="aboutText">
       Buzzwords Counter helps you track and count overused business jargon in real-time.
       Add your favorite buzzwords, click on them during meetings, and trigger confetti when you hit the threshold!
     </p>
