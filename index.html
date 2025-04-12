@@ -147,6 +147,42 @@ footer a:hover {
 </script>
 </head>
 <body class="light">
+  <svg style="display: none;">
+    <!-- 🇺🇸 United States Flag (Simplified) -->
+    <symbol id="flag-en" viewBox="0 0 7410 3900">
+      <rect width="7410" height="3900" fill="#b22234"/>
+      <g fill="#fff">
+        <path d="M0 300h7410v300H0zm0 600h7410v300H0zm0 600h7410v300H0zm0 600h7410v300H0zm0 600h7410v300H0zm0 600h7410v300H0zm0 600h7410v300H0z"/>
+      </g>
+      <rect width="2964" height="2100" fill="#3c3b6e"/>
+      <g fill="#fff">
+        <g id="s">
+          <polygon points="247,90 264,143 319,143 274,176 291,229 247,196 203,229 220,176 175,143 230,143"/>
+        </g>
+        <use xlink:href="#s" x="494"/>
+        <use xlink:href="#s" x="988"/>
+        <use xlink:href="#s" x="1482"/>
+        <use xlink:href="#s" x="247" y="210"/>
+        <use xlink:href="#s" x="741" y="210"/>
+        <use xlink:href="#s" x="1235" y="210"/>
+        <use xlink:href="#s" x="0" y="420"/>
+        <use xlink:href="#s" x="494" y="420"/>
+        <use xlink:href="#s" x="988" y="420"/>
+        <use xlink:href="#s" x="1482" y="420"/>
+        <use xlink:href="#s" x="247" y="630"/>
+        <use xlink:href="#s" x="741" y="630"/>
+        <use xlink:href="#s" x="1235" y="630"/>
+      </g>
+    </symbol>
+  
+    <!-- 🇫🇷 France Flag -->
+    <symbol id="flag-fr" viewBox="0 0 3 2">
+      <rect width="1" height="2" x="0" fill="#0055a4"/>
+      <rect width="1" height="2" x="1" fill="#ffffff"/>
+      <rect width="1" height="2" x="2" fill="#ef4135"/>
+    </symbol>
+  </svg>
+  
   <nav class="navbar navbar-light bg-light shadow-sm mb-3">
     <div class="container-fluid">
       <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#settingsMenu">
@@ -169,10 +205,25 @@ footer a:hover {
       
       <div class="mb-3">
         <label for="lang-select" class="form-label">Language / Langue</label>
-        <select class="form-select" id="lang-select" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-        </select>
+
+        <div class="dropdown mb-3">
+          <button class="btn btn-outline-secondary dropdown-toggle w-100 d-flex align-items-center justify-content-between" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <span><svg width="20" height="14"><use href="#flag-en" /></svg> English</span>
+          </button>
+          <ul class="dropdown-menu w-100" aria-labelledby="langDropdown">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="setLanguage('en')">
+                <svg width="20" height="14"><use href="#flag-en" /></svg> English
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="setLanguage('fr')">
+                <svg width="20" height="14"><use href="#flag-fr" /></svg> Français
+              </a>
+            </li>
+          </ul>
+        </div>
+        
       </div>
       <div class="mb-3">
         <label for="buzzword-input" class="form-label" data-i18n="addBuzzword">Add Buzzwords</label>
@@ -716,6 +767,14 @@ const translations = {
   }
 };
 
+
+function setLanguage(lang) {
+  document.getElementById("langDropdown").innerHTML = 
+    `<span><svg width="20" height="14"><use href="#flag-${lang}" /></svg> ${lang === 'fr' ? 'Français' : 'English'}</span>`;
+  changeLanguage(lang); // your existing function
+}
+
+
 function applyTranslations(lang) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     el.style.opacity = 0;
@@ -736,8 +795,7 @@ function applyTranslations(lang) {
     loadTheme();
     renderBuzzwords();
     renderBuzzwordList();
-    const savedLang = localStorage.getItem(i18nKey) || 'en';
-    document.getElementById("lang-select").value = savedLang;
+    setLanguage(savedLang); // replaces previous line
     applyTranslations(savedLang);
   });
   </script>
